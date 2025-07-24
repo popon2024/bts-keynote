@@ -1,5 +1,6 @@
 "use client";
 
+import AuthLayout from "@/components/AuthLayout";
 import {
   createChecklist,
   createChecklistItem,
@@ -97,7 +98,7 @@ export default function ItemPage() {
   ];
 
   return (
-    <>
+    <AuthLayout>
       {isLoading && <p>Loading...</p>}
       {isError && <p>Error: {(error as Error).message}</p>}
       <div className="mb-10 flex flex-col gap-4">
@@ -166,6 +167,6 @@ export default function ItemPage() {
           </div>
         </>
       )}
-    </>
+    </AuthLayout>
   );
 }

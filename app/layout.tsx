@@ -10,9 +10,7 @@ export default function RootLayout({
   return (
     <Providers>
       <html className="light">
-        <body>
-          <AuthLayout>{children}</AuthLayout>
-        </body>
+        <body>{children}</body>
       </html>
     </Providers>
   );
