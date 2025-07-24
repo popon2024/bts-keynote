@@ -29,7 +29,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex justify-center items-center">
+    <div className="flex justify-center items-center h-full pt-30">
       <div
         className="flex flex-col gap-6 border border-neutral-50"
         style={{ maxWidth: 400, margin: "auto", padding: "2rem" }}

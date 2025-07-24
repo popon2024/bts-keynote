@@ -83,16 +83,29 @@ export default function ItemPage() {
     }
   };
 
+  const colors = [
+    "bg-red-800",
+    "bg-green-800",
+    "bg-blue-800",
+    "bg-yellow-800",
+    "bg-purple-800",
+    "bg-pink-800",
+    "bg-indigo-800",
+    "bg-teal-800",
+    "bg-orange-800",
+    "bg-lime-800",
+  ];
+
   return (
-    <div>
+    <>
       {isLoading && <p>Loading...</p>}
       {isError && <p>Error: {(error as Error).message}</p>}
-      <div className="mb-10">
+      <div className="mb-10 flex flex-col gap-4">
         <div className="text-xl">Add Checklist</div>
         <input
           onKeyDown={handleCreateChecklist}
           type="text"
-          className="border border-neutral-50"
+          className="border border-neutral-50 p-1"
           placeholder="Please Press Key Enter"
         />
       </div>
@@ -101,54 +114,58 @@ export default function ItemPage() {
         <>
           {data.length === 0 && <p>No items found.</p>}
           <div className="grid grid-cols-3 gap-4">
-            {data.map((item: any) => (
-              <div className="shadow-2xl p-4 border rounded-2xl" key={item.id}>
-                <div className="flex justify-between">
-                  <div className="font-bold text-xl">
-                    {item.id}-{item?.name || "-"}
+            {data.map((item: any, index: number) => {
+              const colorClass = colors[index % colors.length];
+              return (
+                <div className={`shadow-2xl p-4 ${colorClass}`} key={item.id}>
+                  <div className="flex justify-between">
+                    <div className="font-bold text-xl">{item?.name || "-"}</div>
+                    <div>
+                      <button
+                        onClick={() => deleteMutation.mutate(item?.id)}
+                        className="cursor-pointer border border-neutral-50 rounded-2xl py-1 px-3"
+                      >
+                        delete
+                      </button>
+                    </div>
+                  </div>
+                  <div className="py-2">
+                    <input
+                      onKeyDown={(e) => handleCreateItems(e, item?.id)}
+                      type="text"
+                      className="border border-neutral-50 p-1"
+                      placeholder="Please Press Key Enter"
+                    />
                   </div>
                   <div>
-                    <button
-                      onClick={() => deleteMutation.mutate(item?.id)}
-                      className="cursor-pointer border border-neutral-50 rounded-2xl py-1 px-3"
-                    >
-                      delete
-                    </button>
+                    {item?.items?.map((value: any, x: number) => (
+                      <div
+                        className="text-md py-2 flex justify-between"
+                        key={x}
+                      >
+                        <div>{value?.name}</div>
+                        <div>
+                          <button
+                            onClick={() => {
+                              deleteMutationItems.mutate({
+                                checklistId: item?.id,
+                                itemId: value?.id,
+                              });
+                            }}
+                            className="cursor-pointer border border-neutral-50 rounded-2xl py-1 px-2"
+                          >
+                            -
+                          </button>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
-                <div className="py-2">
-                  <input
-                    onKeyDown={(e) => handleCreateItems(e, item?.id)}
-                    type="text"
-                    className="border border-neutral-50"
-                    placeholder="Please Press Key Enter"
-                  />
-                </div>
-                <div>
-                  {item?.items?.map((value: any, x: number) => (
-                    <div className="text-md py-2 flex justify-between" key={x}>
-                      <div>{value?.name}</div>
-                      <div>
-                        <button
-                          onClick={() => {
-                            deleteMutationItems.mutate({
-                              checklistId: item?.id,
-                              itemId: value?.id,
-                            });
-                          }}
-                          className="cursor-pointer border border-neutral-50 rounded-2xl py-1 px-2"
-                        >
-                          -
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </>
       )}
-    </div>
+    </>
   );
 }

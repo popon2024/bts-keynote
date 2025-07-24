@@ -9,10 +9,10 @@ export default function AuthLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const token = getToken();
   const router = useRouter();
 
   useEffect(() => {
-    const token = getToken();
     if (!token) {
       router.push("/login");
     }
@@ -25,19 +25,22 @@ export default function AuthLayout({
 
   return (
     <>
-      <nav className="flex justify-between p-4 items-center border-b mb-10 border-amber-200">
-        <div>
-          <strong>My Keynote</strong>
-        </div>
-        <button
-          className="cursor-pointer border border-neutral-50 rounded-2xl py-3 px-4"
-          onClick={handleLogout}
-        >
-          Sign Out
-        </button>
-      </nav>
-      <div className="flex justify-center">
-        <div className="container ">{children}</div>
+      {token && (
+        <nav className="flex justify-between p-4 items-center border-b mb-10 border-amber-200">
+          <div>
+            <strong>My Keynote</strong>
+          </div>
+          <button
+            className="cursor-pointer border border-neutral-50 rounded-2xl py-3 px-4"
+            onClick={handleLogout}
+          >
+            Sign Out
+          </button>
+        </nav>
+      )}
+
+      <div className="flex justify-center h-full">
+        <div className="container h-fit">{children}</div>
       </div>
     </>
   );
